@@ -1,3 +1,14 @@
 body {
-  background-color: red;
+  background-color:#041838;
+}
+img {
+  height:auto;
+  width:439px;
+}
+h1 {
+  font-family:arial;
+  color:#68180c;
+}
+.navbar {
+
 }
