@@ -1,14 +1,41 @@
+
 body {
-  background-color:#041838;
-}
-img {
-  height:auto;
-  width:439px;
+  background-color: #051a33;
 }
 h1 {
-  font-family:arial;
-  color:#68180c;
+  text-shadow: -1px 0 white,0 1px white, 0 -1px white;
+  font-size:175px;
 }
-.navbar {
+img {
+  position: relative;
+  top:-460px;
+  right:-705px;
+}
+ul{
+   list-style-type: none;
+   margin: 50px;
+   padding: 50px;
+   top:-0px;
+   right:-900px;
+   overflow:hidden;
+   background-color: #660808;
+}
 
+li {
+   float: left;
+}
+
+li a {
+   display: block;
+   color: white;
+   text-align: left;
+   padding: 14px 16px;
+   text-decoration: none;
+}
+
+li a:hover {
+   background-color: white;
+}
+.active {
+  background-color: blue;
 }
