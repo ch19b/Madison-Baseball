@@ -1,0 +1,439 @@
+// HEADLINES SCROLLER PLUGIN
+// WRITTEN BY MATT BASSETT
+// VERSION 1.25.17
+
+(function($){
+    $.fn.appScroller = function(settings){
+	// PLUGIN SETTINGS 
+	var config = {
+        "appParent"             : ".hp",
+        "targetApp"             : "upcomingevents", //upcomingevents or headlines
+        "imageNum960"           : 4, //NUMBER OF IMAGES TO DISPLAY AT 960
+        "imageNum768"           : 2, //NUMBER OF IMAGES TO DISPLAY AT 768
+        "imageNum640"           : 2, //NUMBER OF IMAGES TO DISPLAY AT 640
+        "imageNum480"           : 2, //NUMBER OF IMAGES TO DISPLAY AT 480
+        "imageNum320"           : 1, //NUMBER OF IMAGES TO DISPLAY AT 320
+        "backIconFontLetter"    : "l", //LETTER OR NUMBER TO USE FOR THE ICON FONT FOR THE BACK BUTTON
+        "nextIconFontLetter"    : "r", //LETTER OR NUMBER TO USE FOR THE ICON FONT FOR THE BACK BUTTON
+        "buttonColor"           : "#FFF", //COLOR TO BE USED FOR THE BACK AND NEXT BUTTONS
+        "extraBackIconClass"    : "",
+        "extraNextIconClass"    : "",
+        "controlGutter"         : "0" //LEFT/RIGHT MARGINS TO ALLOW ROOM FOR CONTROLS
+	};
+	
+	// EXTEND OUR DEFAULT OPTIONS WITH THOSE PROVIDED 
+	if (settings){$.extend(config, settings);}
+ 
+        // ITERATE OVER THE CURRENT SET OF MATCHED ELEMENTS 
+		return this.each(function(){
+			
+			// DEFINE ELEMENT 
+			var element = this;
+            
+            // DETECT A WINDOW RESIZE 
+            $(window).bind("resize", function(){ headlineScrollerResize(); });
+			
+            headlineScroller();
+            headlineScrollerResize();
+            
+            $(window).load(function() {
+                $(".ui-articles", element).css("margin-left","0");
+                 headlineScrollerResize();
+            });    
+            
+            // APPLY RESPONSIVE DIMENSIONS TO HEADLINE IMAGES
+            $(".ui-widget-detail img", element).each(function() {
+                $(this).css({"display": "inline-block", "width": "100%", "max-width": $(this).attr("width") + "px", "height": "auto", "max-height": $(this).attr("height") + "px"});
+            });
+            
+            //GIVE FIRST AND LAST SLIDE APPROPRIATE CLASSES
+            $(".ui-widget-detail  .ui-articles > li", element).first().addClass("first-slide");
+            $(".ui-widget-detail  .ui-articles > li", element).last().addClass("last-slide");
+            
+            //INITIALLY SET ALL SLIDES TO ARIA-HIDDEN TRUE
+            $(".ui-widget-detail  .ui-articles > li", element).attr("aria-hidden","true");
+            
+            //SET INITIAL TABINDEX TO -1
+            $(".ui-widget-detail  .ui-articles > li a", element).attr("tabindex","-1");
+            
+            //ADD ACTIVE CLASS AND SET ARIA-HIDDEN TO FALSE ON VISIBLE CARDS
+            var activeElements = getNumberOfCards();
+            $(".ui-widget-detail  .ui-articles > li:nth-child(-n+" + getNumberOfCards() + ")", element).addClass("active").attr("aria-hidden","false");
+            
+            //SET TABINDEX OF ACTIVE ITEMS TO 0
+            $(".ui-widget-detail  .ui-articles > li.active a", element).attr("tabindex","0");
+            
+            // CONTENT REGION CLICK
+                // THIS IS TECHNICALLY FOR RESIZE PURPOSES IN CASE THE ROTATOR IS IN A TABBED APP AREA OR AN ACCORDION
+                // THE ROTATOR WILL NOT RESIZE PROPERLY WITHOUT THIS SINCE RESIZE IS ONLY BASED OTHERWISE ON WINDOW RESIZE
+                $(".tab-button, .ui-widget-header").on("click", function() {
+                        headlineScrollerResize();
+                });
+            
+            function headlineScroller() {
+                
+                //DYNAMIC STYLESHEET
+				buildStyleSheet();
+				
+				// ADD SCROLL ARROWS AND ADD CLASSES
+                if(!$(".headlines-scroll-ctrl", element).length) {
+                    $(element).prepend('<div role="button" aria-label="Click to go to previous slide" tabindex="0" class="headlines-scroll-ctrl back icon-font hidden ' + (config.extraBackIconClass) + '">' + (config.backIconFontLetter) + '</div>').append('<div role="button" aria-label="Click to go to next slide" tabindex="0" class="headlines-scroll-ctrl next icon-font hidden ' + (config.extraNextIconClass) + '">' + (config.nextIconFontLetter) + '</div>');
+                }
+                $(".ui-articles li", element).last().addClass("last"); 
+
+                // SCROLL BUTTON CLICK FUNCTION
+                $(".headlines-scroll-ctrl", element).click(function() {
+                    // GET SCROLL DIMENSIONS
+                    var scrollDistance = Number($(".ui-articles > li", element)[0].getBoundingClientRect().width.toFixed(2));
+                    var firstScrollDistance = Number($(".ui-articles > li", element).first()[0].getBoundingClientRect().width.toFixed(2));
+                    var lastScrollDistance = Number($(".ui-articles > li", element).last()[0].getBoundingClientRect().width.toFixed(2));
+                    var slidePos = Number(parseFloat($(".ui-articles", element)[0].style.marginLeft).toFixed(2)) * -1;
+                    var overflowDistance = Number($(".ui-articles", element)[0].getBoundingClientRect().width.toFixed(2)) - Number($(".ui-widget-detail", element)[0].getBoundingClientRect().width.toFixed(2));
+                    var lastScroll = overflowDistance - slidePos;
+                    lastScroll = Number(lastScroll.toFixed(2));
+                    var newPos = 0;
+                    
+                    // ANIMATE THE THUMBNAIL SLIDE
+                    if( !$(".ui-widget-detail", element).hasClass('animating') ){
+                        if($(this).hasClass("next")) {
+                            if(lastScroll < lastScrollDistance) {
+                                newPos = slidePos + lastScroll;
+                            } else {
+                                newPos = slidePos + scrollDistance;
+                                var activeElements = getNumberOfCards();
+                                if(activeElements > 1){
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).first().attr("aria-hidden","true").find("a").attr("tabindex","-1");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).first().removeClass("active");
+
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).last().next().addClass("active");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).last().attr("aria-hidden","false").find("a").attr("tabindex","0");
+                                } else {
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).next().addClass("active");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).last().attr("aria-hidden","false").find("a").attr("tabindex","0");
+                                    
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).first().attr("aria-hidden","true").find("a").attr("tabindex","-1");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).first().removeClass("active");
+                                    
+                                }
+                            }
+                           
+                            newPos = Number(newPos.toFixed(2));
+                            
+                            if(newPos == slidePos || (newPos - slidePos) <= 0.099) { //CHANGE
+                                newPos = 0;
+                                
+                                //SET INITIAL TABINDEX TO -1
+                                $(".ui-widget-detail  .ui-articles > li a", element).attr("tabindex","-1");
+                                $(".ui-widget-detail  .ui-articles > li", element).removeClass("active");
+                                
+                                //RESET ALL SLIDES TO ARIA-HIDDEN TRUE
+                                $(".ui-widget-detail  .ui-articles > li", element).attr("aria-hidden","true");
+                                
+                                //ADD ACTIVE CLASS AND SET ARIA-HIDDEN TO FALSE ON VISIBLE CARDS
+                                var activeElements = getNumberOfCards();
+                                $(".ui-widget-detail  .ui-articles > li:nth-child(-n+" + getNumberOfCards() + ")", element).addClass("active").attr("aria-hidden","false");
+
+                                //SET TABINDEX OF ACTIVE ITEMS TO 0
+                                $(".ui-widget-detail  .ui-articles > li.active a", element).attr("tabindex","0");
+                                
+                            }
+                            
+                            
+                            $(".ui-articles", element).animate({
+                                marginLeft: "-" + newPos + "px"
+                            }, {
+                                'duration': 1000,
+                                'start': function(e){
+                                    $(".ui-widget-detail", element).addClass('animating');
+                                },
+                                'complete': function(e){
+                                    $(".ui-widget-detail", element).removeClass('animating');
+                                }
+                            });
+                        } else if($(this).hasClass("back")) {
+                            if(slidePos == 0 || slidePos <= 0.099){ //CHANGE
+                                newPos = overflowDistance; 
+                                
+                                //SET INITIAL TABINDEX TO -1
+                                $(".ui-widget-detail  .ui-articles > li a", element).attr("tabindex","-1");
+                                $(".ui-widget-detail  .ui-articles > li", element).removeClass("active").attr("aria-hidden","true");
+                                
+                                var activeElements = getNumberOfCards();
+                                $(".ui-widget-detail  .ui-articles > li:nth-last-child(-n+" + getNumberOfCards() + ")", element).addClass("active").attr("aria-hidden","false");
+
+                                //SET TABINDEX OF ACTIVE ITEMS TO 0
+                                $(".ui-widget-detail  .ui-articles > li.active a", element).attr("tabindex","0");
+                                
+                            }else if(slidePos < firstScrollDistance) {
+                                newPos = 0;
+                                
+                                
+                                
+                            } else {
+                                newPos = slidePos - scrollDistance;   
+                                if(activeElements > 1){
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).last().attr("aria-hidden","true").find("a").attr("tabindex","-1");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).last().removeClass("active");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).first().prev().addClass("active");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).first().attr("aria-hidden","false").find("a").attr("tabindex","0");
+                                } else {
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).prev().addClass("active");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).first().attr("aria-hidden","false").find("a").attr("tabindex","0");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).last().attr("aria-hidden","true").find("a").attr("tabindex","-1");
+                                    $(".ui-widget-detail  .ui-articles > li.active", element).last().removeClass("active");
+                                }
+                            }
+                            
+                            
+                            $(".ui-articles", element).animate({
+                                marginLeft: "-" + newPos + "px"
+                            }, {
+                                'duration': 1000,
+                                'start': function(e){
+                                    $(".ui-widget-detail", element).addClass('animating');
+                                },
+                                'complete': function(e){
+                                    $(".ui-widget-detail", element).removeClass('animating');
+                                }
+                            });
+                        }   
+                    }    
+                })
+                .keydown(function(e) { // Trigger the click event from the keyboard
+                    var code = e.which;
+                    // 13 = Return, 32 = Space
+                    if ((code === 13) || (code === 32)) {
+                        e.preventDefault();
+                        $(this).click();
+                    }
+                });
+                    
+				scrollerTimer();
+	       }
+
+            // SCROLL FUNCTION
+            function scrollerRotate() {
+                // GET SCROLL DIMENSIONS
+                var scrollDistance = Number($(".ui-articles > li", element)[0].getBoundingClientRect().width.toFixed(2));
+                var firstScrollDistance = Number($(".ui-articles > li", element).first()[0].getBoundingClientRect().width.toFixed(2));
+                var lastScrollDistance = Number($(".ui-articles > li", element).last()[0].getBoundingClientRect().width.toFixed(2));
+                var slidePos = Number(parseFloat($(".ui-articles", element)[0].style.marginLeft).toFixed(2)) * -1;
+                var overflowDistance = Number($(".ui-articles", element)[0].getBoundingClientRect().width.toFixed(2)) - Number($(".ui-widget-detail", element)[0].getBoundingClientRect().width.toFixed(2));
+                var lastScroll = overflowDistance - slidePos;
+                lastScroll = Number(lastScroll.toFixed(2));
+                var newPos = 0;
+                
+                // ANIMATE THE THUMBNAIL SLIDE
+                if( !$(".ui-widget-detail", element).hasClass('animating') ){
+                    if(lastScroll < lastScrollDistance) {
+                        newPos = slidePos + lastScroll;
+                    } else {
+                        newPos = slidePos + scrollDistance;
+                        var activeElements = getNumberOfCards();
+                        if(activeElements > 1){
+                            $(".ui-widget-detail  .ui-articles > li.active", element).first().attr("aria-hidden","true").find("a").attr("tabindex","-1");
+                            $(".ui-widget-detail  .ui-articles > li.active", element).first().removeClass("active");
+
+                            $(".ui-widget-detail  .ui-articles > li.active", element).last().next().addClass("active");
+                            $(".ui-widget-detail  .ui-articles > li.active", element).last().attr("aria-hidden","false").find("a").attr("tabindex","0");
+                        } else {
+                            $(".ui-widget-detail  .ui-articles > li.active", element).next().addClass("active");
+                            $(".ui-widget-detail  .ui-articles > li.active", element).last().attr("aria-hidden","false").find("a").attr("tabindex","0");
+                            
+                            $(".ui-widget-detail  .ui-articles > li.active", element).first().attr("aria-hidden","true").find("a").attr("tabindex","-1");
+                            $(".ui-widget-detail  .ui-articles > li.active", element).first().removeClass("active");
+                            
+                        }
+                    }
+                   
+                    newPos = Number(newPos.toFixed(2));
+                    
+                    if(newPos == slidePos || (newPos - slidePos) <= 0.099) { //CHANGE
+                        newPos = 0;
+                        
+                        //SET INITIAL TABINDEX TO -1
+                        $(".ui-widget-detail  .ui-articles > li a", element).attr("tabindex","-1");
+                        $(".ui-widget-detail  .ui-articles > li", element).removeClass("active");
+                        
+                        //RESET ALL SLIDES TO ARIA-HIDDEN TRUE
+                        $(".ui-widget-detail  .ui-articles > li", element).attr("aria-hidden","true");
+                        
+                        //ADD ACTIVE CLASS AND SET ARIA-HIDDEN TO FALSE ON VISIBLE CARDS
+                        var activeElements = getNumberOfCards();
+                        $(".ui-widget-detail  .ui-articles > li:nth-child(-n+" + getNumberOfCards() + ")", element).addClass("active").attr("aria-hidden","false");
+
+                        //SET TABINDEX OF ACTIVE ITEMS TO 0
+                        $(".ui-widget-detail  .ui-articles > li.active a", element).attr("tabindex","0");
+                        
+                    }
+                    
+                    
+                    $(".ui-articles", element).animate({
+                        marginLeft: "-" + newPos + "px"
+                    }, {
+                        'duration': 1000,
+                        'start': function(e){
+                            $(".ui-widget-detail", element).addClass('animating');
+                        },
+                        'complete': function(e){
+                            $(".ui-widget-detail", element).removeClass('animating');
+                        }
+                    });  
+                }    
+            }
+
+            // ROTATE TIMER
+            function scrollerTimer(){
+                var scrollerTimer = setInterval(function(){
+                    scrollerRotate();
+                }, 5000);
+            }
+            
+            function getNumberOfCards(){ //CHANGE - moved this out of the init function so it could be used elsewhere
+                var cardNums = 0;
+                switch(jsBreakPoint()){
+                    case 960: 
+                        cardNums = (config.imageNum960);
+                        break;
+                    case 768: 
+                        cardNums = (config.imageNum768);
+                        break;
+                    case 640: 
+                        cardNums = (config.imageNum640);
+                        break;
+                    case 480: 
+                        cardNums = (config.imageNum480);
+                        break;
+                    case 320: 
+                        cardNums = (config.imageNum320);
+                        break;
+                    default:
+                        break;
+                }
+                return cardNums;
+            }
+            
+            function headlineScrollerResize() {
+               
+                
+                
+                // SET WIDTH OF HEADLINES
+				var headlineNum = $(".ui-articles > li", element).length;
+				var headlineWidth = 0;
+                
+                headlineWidth = $(".ui-widget-detail", element)[0].getBoundingClientRect().width / (getNumberOfCards()); //CHANGE - moved the conditional blocks to a function for repeat use.
+                
+				$(".ui-articles li", element).each(function() {
+					   $(this).css("width", headlineWidth + "px");
+				});
+               
+				$(".ui-articles", element).css("width", (headlineWidth * headlineNum));
+                
+				// SHOW ARROWS IF NEEDED
+                    if($(".ui-articles", element).width() > $(".ui-widget-detail", element).width()){
+                        $(".headlines-scroll-ctrl", element).removeClass("hidden");
+                    } 
+                
+                //REMOVE ALL THE ACTIVE CLASSES
+                $(".ui-widget-detail  .ui-articles > li", element).removeClass("active");
+                
+                //INITIALLY SET ALL SLIDES TO ARIA-HIDDEN TRUE
+                $(".ui-widget-detail  .ui-articles > li", element).attr("aria-hidden","true");
+
+                //SET INITIAL TABINDEX TO -1
+                $(".ui-widget-detail  .ui-articles > li a", element).attr("tabindex","-1");
+
+                //ADD ACTIVE CLASS AND SET ARIA-HIDDEN TO FALSE ON VISIBLE CARDS
+                var activeElements = getNumberOfCards();
+                $(".ui-widget-detail  .ui-articles > li:nth-child(-n+" + getNumberOfCards() + ")", element).addClass("active").attr("aria-hidden","false");
+
+                //SET TABINDEX OF ACTIVE ITEMS TO 0
+                $(".ui-widget-detail  .ui-articles > li.active a", element).attr("tabindex","0");
+                
+            }
+            
+            function buildStyleSheet(){
+                var dynStyleSheet = document.createElement('style');
+
+                if(dynStyleSheet) {
+                    dynStyleSheet.setAttribute('type', 'text/css');
+                    var head = document.getElementsByTagName('head')[0];
+
+                    if(head) {
+                        head.insertBefore(dynStyleSheet, head.childNodes[0]);
+                    }
+
+                    var dynStyles =	(config.appParent) + ' .headlines-scroll-ctrl {' +
+                            '    color:' + (config.buttonColor) + ';' +
+                            '}' +
+                            (config.appParent) + ' .headlines-scroll-ctrl {' +
+                            '    position: absolute;' +
+                            '    font-size: 30px;' +
+                            '    width: 30px;' +
+                            '    height: 30px;' +
+                            '    top: 50%;' +
+                            '    margin-top: -15px;' +
+                            '    cursor: pointer;' +
+                            '    text-align: center;' +
+                            '}' +
+                            (config.appParent) + ' .headlines-scroll-ctrl.back {' +
+                            '    left: 0%;' +
+                            '}' +
+                            (config.appParent) + ' .headlines-scroll-ctrl.next {' +
+                            '    right: 0%;' +
+                            '}' +
+                            (config.appParent) + ' div.ui-widget.app.' + (config.targetApp) + '{' +
+                            '    position: relative;' +
+                            ' }' +
+                            (config.appParent) + ' div.ui-widget.app.' + (config.targetApp) + ' .ui-widget-detail {' +
+                            '    overflow: hidden;' +
+                            '    margin: 0px ' + (config.controlGutter) + 'px;' +
+                            ' }' +
+                            (config.appParent) + ' div.ui-widget.app.' + (config.targetApp) + ' .ui-articles {' +
+                            '    width: 100%;' +
+                            '    margin: 0px;' +
+                            '    position: relative;' +
+                            '}' +
+                            (config.appParent) + ' div.ui-widget.app.' + (config.targetApp) + ' li {' +
+                            '    float: left;' +
+                            '}' +
+                            (config.appParent) + ' div.ui-widget.app.' + (config.targetApp) + ' .ui-article {' +
+                            '    position: relative;' +
+                            '    padding: 15px;' +
+                            '}' +
+                            (config.appParent) + ' div.ui-widget.app.headlines .ui-article-thumb {' +
+                            '    float: none;' +
+                            '    overflow: visible;' +
+                            '}';
+
+                    var rules = document.createTextNode(dynStyles);
+
+                    if(dynStyleSheet.styleSheet){ // IE
+                        dynStyleSheet.styleSheet.cssText = dynStyles;
+                    } else {
+                        dynStyleSheet.appendChild(rules);
+                    }
+                }
+            }
+
+            
+            function jsBreakPoint(){
+                // 960
+                if ($(window).width() >= 1024) { return 960; } 
+
+                // 768
+                if ($(window).width() >= 768 && $(window).width() < 1024) { return 768; }
+
+                // 640
+                if ($(window).width() >= 640 && $(window).width() < 768) { return 640; }
+
+                // 480
+                if ($(window).width() >= 480 && $(window).width() < 640) { return 480; }
+
+                // 320
+                if ($(window).width() >= 320 && $(window).width() < 480) { return 320; }
+            }
+            
+        });
+    }
+})(jQuery);
