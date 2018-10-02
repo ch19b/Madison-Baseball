@@ -1,9 +1,10 @@
+
 body {
   background-color: #051a33;
 }
 h1 {
   text-shadow: -1px 0 white,0 1px white, 0 -1px white;
-  font-size:115px;
+  font-size:75px;
   top:160px;
 }
 image {

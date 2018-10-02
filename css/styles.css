@@ -9,8 +9,9 @@ h1 {
 }
 img {
   position: relative;
-  top:-470px;
+  top:-455px;
   right:-705px;
+  size:300px;
 }
 ul{
    list-style-type: none;
@@ -44,7 +45,7 @@ h4 {
   color:white;
 }
 
-  .footer {
+footer {
       position: fixed;
       left: 0;
       bottom: 0;
