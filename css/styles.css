@@ -3,14 +3,15 @@ body {
   background-color: #051a33;
 }
 h1 {
-  text-shadow: -1px 0 white,0 1px white, 0 -1px white;
-  font-size:175px;
+  text-shadow: -1px 0  white,0 1px white, 0 -1px white;
+  font-size:85px;
   top:150px;
+  right:300px;
 }
 img {
   position: relative;
-  top:-455px;
-  right:-705px;
+  top:-45px;
+  right:-655px;
   size:300px;
 }
 ul{

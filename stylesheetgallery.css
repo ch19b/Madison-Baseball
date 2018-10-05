@@ -4,8 +4,9 @@ body {
 }
 h1 {
   text-shadow: -1px 0 white,0 1px white, 0 -1px white;
-  font-size:75px;
+  font-size:55px;
   top:160px;
+  
 }
 image {
   position: relative;
@@ -55,13 +56,31 @@ footer {
       background-color: #660808;
       color: white;
       text-align: center;
-  }
-  .row {
-    display: flex;
-  }
+  }body, html {
+    height: 100%;
+}
 
-  .column {
-    flex: 33.33%;
-    padding: 5px;
-  }
-  
+/* The hero image */
+.hero-image {
+    /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("bryce.jpg");
+
+    /* Set a specific height */
+    height: 30%;
+
+    /* Position and center the image to scale nicely on all screens */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+/* Place text in the middle of the image */
+.hero-text {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
