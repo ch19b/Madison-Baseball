@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link href="./styles.css" rel="stylesheet" type="text/css" />
+  <title>Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div class="container">
+<style>
+#mySidenav a {
+position: absolute;
+left: -80px;
+transition: 0.3s;
+padding: 15px;
+width: 100px;
+text-decoration: none;
+font-size: 20px;
+color: white;
+border-radius: 0 5px 5px 0;
+}
+
+#mySidenav a:hover {
+left: 0;
+}
+
+#Schedule {
+top: 20px;
+background-color: #445B75;
+}
+
+#Gallery {
+top: 80px;
+background-color:  #660808;
+}
+
+#About {
+top: 140px;
+background-color: white;
+
+}
+
+#Player-Profile {
+top: 200px;
+background-color: #F0BD44;
+}
+</style>
+
+    <div id="mySidenav" class="sidenav">
+    <a href="./Schedule.html" id="Schedule">Schedule</a>
+    <a href="./Gallery.html" id="Gallery">Gallery</a>
+    <a href="./About.html" id="About">About</a>
+    <a href="./Player-Profile.html" id="Player-Profile">Player Profile</a>
+    </div>
+  </div>
+      <h1 style='color:white'>Madison Baseball</h1>
+      <div class="bg-image"></div>
+
+  <div class="bg-text">
+    <h1></h1>
+    <p></p>
+  </div>
+  <style>
+  body, html {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.bg-image {
+  /* The image used */
+  background-image: url("bryce.jpg");
+
+  /* Add the blur effect */
+  filter: blur(0px);
+  -webkit-filter: blur(0px);
+
+  /* Full height */
+  height: 30%;
+  width:1133px;
+  right:30px;
+  position:absolute;
+
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Position text in the middle of the page/image */
+
+}
+
+  </style>
+  <div class="row">
+    <div class="column">
+      <div class="card">
+        <img src="./boop.PNG" alt="Schedule" style="width:100%">
+        <div class="container">
+          <h2>Schedule</h2>
+          <p class="title"> </p>
+          <p>Our upcoming games/fundraisers.</p>
+          <p></p>
+          <p><button class="button">More</button></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="card">
+        <img src="img2.jpg" alt="Mike" style="width:100%">
+        <div class="container">
+          <h2>Gallery</h2>
+          <p class="title"></p>
+          <p>Recent pictures from games.</p>
+          <p></p>
+          <p><button class="button">More</button></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="card">
+        <img src="img3.jpg" alt="John" style="width:100%">
+        <div class="container">
+          <h2>Player-Profile</h2>
+          <p class="title"></p>
+          <p>Our teams players.</p>
+          <p></p>
+          <p><button class="button">More</button></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <footer>
+  <p>Head Coach: Chris Clark</p>
+  <p>Contact information: <a href="cdclark@jmcss.org">
+  cdclark@jmcss.org</a></p>
+</footer>
+
+</body>
+
+</html>
