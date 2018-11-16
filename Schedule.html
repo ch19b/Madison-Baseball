@@ -10,54 +10,62 @@
     <h1 style='color:white'>Schedule</h1>
   <div class="container">
     <<meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      #mySidenav a {
+        position: absolute;
+        left: -80px;
+        transition: 0.3s;
+        padding: 15px;
+        width: 100px;
+        text-decoration: none;
+        font-size: 20px;
+        color: white;
+        border-radius: 0 5px 5px 0;
+      }
+
+      #mySidenav a:hover {
+        left: 0;
+      }
+      #Index {
+        top:0px;
+        background-color: grey;
+      }
+      #Schedule {
+        top: 60px;
+        background-color: #445B75;
+      }
+
+      #Gallery {
+        top: 120px;
+        background-color: #660808;
+      }
+
+      #About {
+        top: 180px;
+        background-color:#98a5ba;
+
+      }
+
+      #Player-Profile {
+        top: 240px;
+        background-color: #F0BD44;
+      }
+    </style>
+
+    <div id="mySidenav" class="sidenav">
+      <a href="./Index.html" id="Index">Home</a>
+      <a href="./Schedule.html" id="Schedule">Schedule</a>
+      <a href="./Gallery.html" id="Gallery">Gallery</a>
+      <a href="./About.html" id="About">About</a>
+      <a href="./Player-Profile.html" id="Player-Profile">Player Profile</a>
+    </div>
+      <iframe src="https://calendar.google.com/calendar/embed?src=lbmcp7et5p5v5hoqu98190j2hk%40group.calendar.google.com&ctz=America%2FChicago" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
 <style>
-#mySidenav a {
-    position: absolute;
-    left: -80px;
-    transition: 0.3s;
-    padding: 15px;
-    width: 100px;
-    text-decoration: none;
-    font-size: 20px;
-    color: white;
-    border-radius: 0 5px 5px 0;
-}
-
-#mySidenav a:hover {
-    left: 0;
-}
-
-#Home {
-    top: 20px;
-    background-color: #445B75;
-}
-
-#Gallery {
-    top: 80px;
-    background-color:  #660808;
-}
-
-#About {
-    top: 140px;
-    background-color: #98a5ba;
-}
-
-#Player-Profile {
-    top: 200px;
-    background-color: #F0BD44;
+h1 {
+  position: relative;
+  right:-375px;
 }
 </style>
-</head>
-<body>
-
-<div id="mySidenav" class="sidenav">
-  <a href="./index.html" id="Home">Home</a>
-  <a href="./Gallery.html" id="Gallery">Gallery</a>
-  <a href="./About.html" id="About">About</a>
-  <a href="./Player-Profile.html" id="Player-Profile">Player Profile</a>
-</div>
-      <iframe src="https://calendar.google.com/calendar/embed?src=lbmcp7et5p5v5hoqu98190j2hk%40group.calendar.google.com&ctz=America%2FChicago" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-
   <div class="main">
     <footer>
   <p>Head Coach: Chris Clark</p>

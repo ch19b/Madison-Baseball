@@ -10,97 +10,58 @@
   <div class="container">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-    #mySidenav a {
-    position: absolute;
-    left: -80px;
-    transition: 0.3s;
-    padding: 15px;
-    width: 100px;
-    text-decoration: none;
-    font-size: 20px;
-    color: white;
-    border-radius: 0 5px 5px 0;
-    }
+      #mySidenav a {
+        position: absolute;
+        left: -80px;
+        transition: 0.3s;
+        padding: 15px;
+        width: 100px;
+        text-decoration: none;
+        font-size: 20px;
+        color: white;
+        border-radius: 0 5px 5px 0;
+      }
 
-    #mySidenav a:hover {
-    left: 0;
-    }
+      #mySidenav a:hover {
+        left: 0;
+      }
+      #Index {
+        top:0px;
+        background-color: grey;
+      }
+      #Schedule {
+        top: 60px;
+        background-color: #445B75;
+      }
 
-    #Schedule {
-    top: 20px;
-    background-color: #445B75;
-    }
+      #Gallery {
+        top: 120px;
+        background-color: #660808;
+      }
 
-    #Home {
-    top: 80px;
-    background-color:  #660808;
-    }
+      #About {
+        top: 180px;
+        background-color:#98a5ba;
 
-    #About {
-    top: 140px;
-    background-color: #98a5ba;
-    }
+      }
 
-    #Player-Profile {
-    top: 200px;
-    background-color: #F0BD44;
-    }
+      #Player-Profile {
+        top: 240px;
+        background-color: #F0BD44;
+      }
     </style>
 
-
     <div id="mySidenav" class="sidenav">
-    <a href="./Schedule.html" id="Schedule">Schedule</a>
-    <a href="./index.html" id="Home">Home</a>
-    <a href="./About.html" id="About">About</a>
-    <a href="./Player-Profile.html" id="Player-Profile">Player Profile</a>
+      <a href="./Index.html" id="Index">Home</a>
+      <a href="./Schedule.html" id="Schedule">Schedule</a>
+      <a href="./Gallery.html" id="Gallery">Gallery</a>
+      <a href="./About.html" id="About">About</a>
+      <a href="./Player-Profile.html" id="Player-Profile">Player Profile</a>
     </div>
   </div>
+  
       <h1 style='color:white'></h1>
       <div class="container">
-
-        <!-- Full-width images with number text -->
-        <div class="mySlides">
-          <div class="numbertext">1 / 6</div>
-            <img src=" style="width:100%">
-        </div>
-
-        <div class="mySlides">
-          <div class="numbertext">2 / 6</div>
-            <img src="img_5terre_wide.jpg" style="width:100%">
-        </div>
-
-        <div class="mySlides">
-          <div class="numbertext">3 / 6</div>
-            <img src="img_mountains_wide.jpg" style="width:100%">
-        </div>
-
-        <div class="mySlides">
-          <div class="numbertext">4 / 6</div>
-            <img src="img_lights_wide.jpg" style="width:100%">
-        </div>
-
-        <div class="mySlides">
-          <div class="numbertext">5 / 6</div>
-            <img src="img_nature_wide.jpg" style="width:100%">
-        </div>
-
-        <div class="mySlides">
-          <div class="numbertext">6 / 6</div>
-            <img src="img_snow_wide.jpg" style="width:100%">
-        </div>
-
-        <!-- Next and previous buttons -->
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-        <!-- Image text -->
-        <div class="caption-container">
-          <p id="caption"></p>
-        </div>
-
-
-      </div>
-
     <footer>
   <p>Head Coach: Chris Clark</p>
   <p>Contact information: <a href="cdclark@jmcss.org">
