@@ -1,3 +1,5 @@
+
+@media screen and (max-width:2403px) {
 body {
   background-color: #080738;
 }
@@ -5,17 +7,17 @@ body {
 h1 {
   position: relative;
   color: white;
-  font-size: 85px;
+  font-size: 95px;
   top: 0px;
-  right:-257px;
+  right:-575px;
   font-family: Arial, Helvetica, sans-serif;
 
 }
 
 img {
   position: absolute;
-  top: px;
-  right: ;
+  top: ;
+  right:;
 }
 
 ul {
@@ -72,51 +74,60 @@ footer {
   color: white;
 }
 
-/* Display the columns below each other instead of side by side on small screens */
-@media screen and (max-width: 650px) {
-  .column {
-    width: 100%;
-    display: block;
-  }
-}
 
-/* Add some shadows to create a card effect */
-.card {
-  box-shadow: 0 4px 8px 0 #660808;
-}
 
-/* Some left and right padding inside the container */
-.container {
-  padding: 0 16px;
-}
-
-/* Clear floats */
-.container::after, .row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.title {
-  color: white;
-}
-
-.button {
-  border: none;
-  outline: 0;
-  display: inline-block;
-  padding: 8px;
-  color: white;
-  background-color: #660808;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-}
-
-.button:hover {
-  background-color: white;
-}
 iframe {
   position: absolute;
   right:300px;
+}
+.column {
+    float: left;
+    width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+#mySidenav a {
+  position: absolute;
+  left: -80px;
+  transition: 0.3s;
+  padding: 15px;
+  width: 100px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  border-radius: 0 5px 5px 0;
+}
+
+#mySidenav a:hover {
+  left: 0;
+}
+#Index {
+  top:0px;
+  background-color: grey;
+}
+#Schedule {
+  top: 60px;
+  background-color: #445B75;
+}
+
+#Gallery {
+  top: 120px;
+  background-color: #660808;
+}
+
+#About {
+  top: 180px;
+  background-color:#98a5ba;
+
+}
+
+#Player-Profile {
+  top: 240px;
+  background-color: #F0BD44;
+}
 }
