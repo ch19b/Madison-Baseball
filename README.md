@@ -1,1 +1,2 @@
 # Coding1sitestructure
+This is the readme file for Unorthodox Fox. We feel like we could have done more as far as web designing process. We did not get done setting media widths and therefor our website does not quite load right on anything but a 24 inch monitor. We also could not get the Roster to page to use the table code. A lot of malfunctions happened such as the roster tab hiding behind an image on the gallery page.
